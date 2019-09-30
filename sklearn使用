@@ -1,0 +1,23 @@
+1.Pipeline的作用：
+
+        Pipeline可以将许多算法模型串联起来，可以用于把多个estamitors级联成一个estamitor,比如将特征提取、
+        归一化、分类组织在一起形成一个典型的机器学习问题工作流。
+        Pipleline中最后一个之外的所有estimators都必须是变换器（transformers），
+        最后一个estimator可以是任意类型（transformer，classifier，regresser）,如果最后一个estimator是个分类器，则整个pipeline就可以作为分类器使用，
+        如果最后一个estimator是个聚类器，则整个pipeline就可以作为聚类器使用。
+
+        主要带来两点好处：
+        1.直接调用fit和predict方法来对pipeline中的所有算法模型进行训练和预测。
+        2.可以结合grid search对参数进行选择.
+
+2.串行化用法：
+
+(1)通过steps参数，设定数据处理流程。格式为('key','value')，key是自己为这一step设定的名称，value是对应的处理类。最后通过list将这些step传入。前n-1个step中的类都必须有transform函数，最后一步可有可无，一般最后一步为模型。使用最简单的iris数据集来举例：
+
+from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+from sklearn.decomposition import PCA
+from sklearn.datasets import load_iris
+iris=load_iris()
+pipe=Pipeline(steps=[('pca',PCA()),('svc',SVC())])
+pipe.fit(iris.data,iris.target)
